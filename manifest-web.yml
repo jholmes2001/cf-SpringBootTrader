@@ -9,4 +9,5 @@ env:
 applications:
 - name: webtrader
   path: springboottrades-web/build/libs/web-0.2.jar
-  services: [  eureka-service  ]
+  host: webtrader-jholmes
+  services: [  eureka-service, cbreaker ]

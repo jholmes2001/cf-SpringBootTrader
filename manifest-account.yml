@@ -9,4 +9,5 @@ env:
 applications:
 - name: accounts
   path: springboottrades-accounts/build/libs/accounts-0.2.jar
+  host: accounts-jholmes
   services: [ traderdb, eureka-service ]

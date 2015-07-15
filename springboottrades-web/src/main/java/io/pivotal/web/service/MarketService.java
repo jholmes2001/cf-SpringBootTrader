@@ -60,7 +60,7 @@ public class MarketService {
 	}
 	
 	private Quote getQuoteFallback(String symbol) {
-		logger.debug("Fetching fallback quote for: " + symbol);
+		logger.debug("Circuit closed: Fetching fallback quote for: " + symbol);
 		//Quote quote = restTemplate.getForObject("http://quotes/quote/{symbol}", Quote.class, symbol);
 		Quote quote = new Quote();
 		quote.setSymbol(symbol);
@@ -74,6 +74,7 @@ public class MarketService {
 		return Arrays.asList(infos);
 	}
 	private List<CompanyInfo> getCompaniesFallback(String name) {
+		logger.debug("Circuit closed: calling getCompaniesFallback");
 		List<CompanyInfo> infos = new ArrayList<>();
 		return infos;
 	}

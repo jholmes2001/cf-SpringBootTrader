@@ -1,5 +1,7 @@
 package io.pivotal.web.controller;
 
+import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 
 import io.pivotal.web.domain.Order;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Controller
 public class PortfolioController {
@@ -50,7 +55,32 @@ public class PortfolioController {
 		
 		return "portfolio";
 	}
+	
+    @Autowired
+    private FlakeyService service;
 
+    @RequestMapping("/cbtest")
+    public String hello() {
+        return service.hello();
+    }
+
+    @Component
+    public static class FlakeyService {
+
+        @HystrixCommand(fallbackMethod="goodbye")
+        public String hello() {
+            if (Calendar.getInstance().get(Calendar.MINUTE) % 2 == 0) {
+                throw new RuntimeException();
+            }
+            return "hello!";
+        }
+
+        String goodbye() {
+            return "goodbye.";
+        }
+
+    }
+			
 	@ExceptionHandler({ Exception.class })
 	public ModelAndView error(HttpServletRequest req, Exception exception) {
 		logger.debug("Handling error: " + exception);

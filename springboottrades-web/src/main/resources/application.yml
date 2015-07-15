@@ -1,13 +1,13 @@
 spring:
   profiles.active: local
   application:
-     name: webUI
+     name: webtrader
 eureka:
   client:
     registerWithEureka: false
     registryFetchIntervalSeconds: 10
     serviceUrl:
-      defaultZone: http://${vcap.services.eureka-service.credentials.uri:127.0.0.1:8761}/eureka/
+      defaultZone: ${vcap.services.eureka-service.credentials.uri:127.0.0.1:8761}/eureka/
   instance:
     hostname: ${vcap.application.uris[0]:localhost} 
     metadataMap:
